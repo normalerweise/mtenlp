@@ -7,4 +7,7 @@ object LibConfig {
 }
 trait LibConfig {
  def config = LibConfig.config
+
+  def tripleStoreURL = config.getString("mtner.triplestore.url")
+
 }

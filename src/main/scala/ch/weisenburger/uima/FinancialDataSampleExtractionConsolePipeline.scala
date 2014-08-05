@@ -7,7 +7,7 @@ import org.apache.uima.jcas.JCas
 /**
  * Created by Norman on 07.07.14.
  */
-class FinancialDataSampleConsolePipeline private[uima] (
+class FinancialDataSampleExtractionConsolePipeline private[uima] (
   protected val components: Seq[JCasAnnotator_ImplBase],
   private val jCas: JCas) extends PipelineStatistics {
 

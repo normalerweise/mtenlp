@@ -25,7 +25,7 @@ object ConsecutiveYearsForSeveralRelations extends App {
     "2012",
     "2011")
 
-  val relationByYearQuery = (relation: String, year: String) => AnyQuery("relation-by-year-query", triplestoreUrl + "/company/ch.weisenburger.sparql",
+  val relationByYearQuery = (relation: String, year: String) => AnyQuery("relation-by-year-query", triplestoreUrl + "/company/sparql",
     s"""
       |SELECT DISTINCT ?s
       |WHERE {

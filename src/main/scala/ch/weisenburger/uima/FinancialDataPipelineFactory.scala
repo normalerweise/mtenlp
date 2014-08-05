@@ -16,52 +16,66 @@ import org.slf4j.LoggerFactory
 /**
  * Created by Norman on 11.07.14.
  */
-object FinancialDataSamplePipelineFactory extends HeidelTimeStandaloneConfig {
+object FinancialDataPipelineFactory extends HeidelTimeStandaloneConfig {
 
   private val log = LoggerFactory.getLogger(getClass)
 
   private val jcasFactory = createJcasFactory
   private val uimaContext = createUimaContext
 
-  private lazy val posTagger = new MyStanfordPOSTaggerWrapper
-  private lazy val sampleCandidateScalaCaseConverter = new SampleCandidateScalaCaseConverter
-  private lazy val sampleScalaCaseConverter = new SampleScalaCaseConverter
+  // reusable thread safe components
+  private lazy val posTagger = initUimaComponent(new MyStanfordPOSTaggerWrapper)
+  private lazy val heidelTime = initUimaComponent(new HeidelTime)
 
-  private def commmonComponents = Seq(
-    posTagger,
-    new HeidelTime,
+
+  private lazy val commmonComponents = Seq(posTagger, heidelTime) ++ initUimaComponents(Seq(
     new CompanyAnnotator,
     new FinancialDataRelationAnnotator,
     new FormattedNumberAnnotator,
     new SampleAnnotator
-  )
+  ))
 
-  private lazy val consoleComponents = Seq(
+  private lazy val consoleComponents = initUimaComponents(Seq(
     new SampleCandidateHumanReadableWriter,
     new SampleHumanReadableWriter
-  )
+  ))
 
 
-  def createTestPipeline(components: Seq[JCasAnnotator_ImplBase]) = synchronized {
+  def createSampleExtractionTestPipeline(components: Seq[JCasAnnotator_ImplBase]) = synchronized {
     log.debug("creating test pipeline")
     components.foreach(c => c.initialize(uimaContext))
     new TestPipeline(components, jcasFactory.createJCas)
   }
 
-  def createConsolePipeline = synchronized {
+  def createSampleExtractionConsolePipeline = synchronized {
     log.debug("creating console pipeline")
-    initUimaComponents
-    new FinancialDataSampleConsolePipeline(commmonComponents ++ consoleComponents, jcasFactory.createJCas) }
+    new FinancialDataSampleExtractionConsolePipeline(commmonComponents ++ consoleComponents, jcasFactory.createJCas)
+  }
 
-  def createScalaPipeline = synchronized {
+  def createSampleExctractionScalaCaseClassPipeline = synchronized {
     log.debug("creating scala case class pipeline")
-    initUimaComponents
-    new FinancialDataSampleScalaCasePipeline(
-      commmonComponents, jcasFactory.createJCas, sampleScalaCaseConverter, sampleCandidateScalaCaseConverter) }
 
-  private lazy val initUimaComponents: Unit =
-    (Seq(sampleScalaCaseConverter, sampleCandidateScalaCaseConverter) ++ consoleComponents ++ commmonComponents)
-      .foreach(c => c.initialize(uimaContext))
+    val sampleScalaCaseConverter = initUimaComponent(new SampleScalaCaseConverter)
+    val sampleCandidateScalaCaseConverter = initUimaComponent(new SampleCandidateScalaCaseConverter)
+
+    new FinancialDataSampleExtractionScalaCaseClassPipeline(
+      commmonComponents, jcasFactory.createJCas, sampleScalaCaseConverter, sampleCandidateScalaCaseConverter)
+  }
+
+  def createTimexExtractionScalaCaseClassPipeline = synchronized {
+    val timexScalaCaseConverter = initUimaComponent(new TimexScalaCaseConverter)
+    new TimexExtractionScalaCaseClassPipeline(jcasFactory.createJCas, posTagger, heidelTime, timexScalaCaseConverter)
+  }
+
+  def initUimaComponents(components: Seq[JCasAnnotator_ImplBase]): Seq[JCasAnnotator_ImplBase] = {
+    components.foreach(c => c.initialize(uimaContext))
+    components
+  }
+
+  def initUimaComponent[T <: JCasAnnotator_ImplBase](component: T): T = {
+    component.initialize(uimaContext)
+    component
+  }
 
   private def createUimaContext = {
     log.debug("creating uima context")

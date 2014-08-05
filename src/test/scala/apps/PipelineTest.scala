@@ -1,6 +1,6 @@
 package apps
 
-import ch.weisenburger.uima.FinancialDataSamplePipelineFactory
+import ch.weisenburger.uima.FinancialDataPipelineFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -15,8 +15,8 @@ object PipelineTest extends App {
 
   val text = Source.fromFile("data/sample.txt").mkString
 
-  val pipeline1 = Future { FinancialDataSamplePipelineFactory.createConsolePipeline }
-  val pipeline2 = Future { FinancialDataSamplePipelineFactory.createConsolePipeline }
+  val pipeline1 = Future { FinancialDataPipelineFactory.createSampleExtractionConsolePipeline }
+  val pipeline2 = Future { FinancialDataPipelineFactory.createSampleExtractionConsolePipeline }
 
   pipeline1.onComplete {
     case Success(pipeline) =>

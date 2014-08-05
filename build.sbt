@@ -4,7 +4,10 @@ version := "1.0-SNAPSHOT"
 
 organization := "ch.weisenburger"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
+
+// enable improved (experimental) incremental compilation algorithm called "name hashing"
+incOptions := incOptions.value.withNameHashing(true)
 
 resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
 

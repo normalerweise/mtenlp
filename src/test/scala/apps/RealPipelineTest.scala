@@ -1,6 +1,6 @@
 package apps
 
-import ch.weisenburger.uima.FinancialDataSamplePipelineFactory
+import ch.weisenburger.uima.FinancialDataPipelineFactory
 
 import scala.io.Source
 
@@ -11,7 +11,7 @@ object RealPipelineTest extends App {
 
     val text = Source.fromFile("data/realsample2.txt").mkString
 
-    val pipeline = FinancialDataSamplePipelineFactory.createConsolePipeline
+    val pipeline = FinancialDataPipelineFactory.createSampleExtractionConsolePipeline
     pipeline.process(text,"http://dbpedia.org/resource/Apple_Inc.",123456)
 
     println(pipeline.stats.map{ case (componentName,stats) =>

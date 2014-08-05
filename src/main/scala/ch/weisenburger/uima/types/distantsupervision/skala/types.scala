@@ -14,9 +14,14 @@ object SkalaTypeConversions extends UimaTypesSugar {
      case r => distantsupervision.skala.Relation(r.getOntologyURI, r.beginRelativeToSentence(s), r.endRelativeToSentence(s))
    }
 
-   val tToScalaType = (t: heideltime.Timex3, s: heideltime.Sentence) => t match {
+  def tToScalaType(t: heideltime.Timex3) = t match {
+    case null => null
+    case t => distantsupervision.skala.Timex(t.getTimexValue, t.getTimexType, t.getBegin, t.getEnd)
+  }
+
+   def tToScalaType(t: heideltime.Timex3, s: heideltime.Sentence) = t match {
      case null => null
-     case t => distantsupervision.skala.Timex(t.getTimexValue, t.beginRelativeToSentence(s), t.endRelativeToSentence(s))
+     case t => distantsupervision.skala.Timex(t.getTimexValue, t.getTimexType, t.beginRelativeToSentence(s), t.endRelativeToSentence(s))
    }
 
    val vToScalaType = (v: distantsupervision.Value, s: heideltime.Sentence) =>
@@ -27,7 +32,7 @@ object SkalaTypeConversions extends UimaTypesSugar {
 case class Entity(dbpediaResourceUri: String, begin: Int, end: Int)
 case class Relation(dbpediaOntologyUri: String, begin: Int, end: Int)
 case class Value(parsedNumericValue: String, begin: Int, end: Int)
-case class Timex(value: String, begin: Int, end: Int)
+case class Timex(value: String, ttype: String, begin: Int, end: Int)
 case class Quad(entity: String, relation: String, value: String, timex: Option[String])
 
 /** A Sample is a natural language sentence which can be mapped to a known quad in a knowledge base

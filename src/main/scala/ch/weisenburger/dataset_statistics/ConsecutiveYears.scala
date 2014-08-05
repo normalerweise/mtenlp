@@ -15,11 +15,11 @@ object ConsecutiveYears extends App {
 //  val relation = "http://dbpedia.org/ontology/revenue"
 //  val relation = "http://dbpedia.org/ontology/equity"
 //  val relation = "http://dbpedia.org/ontology/assets"
-  val relation = "http://dbpedia.org/ontology/operatingIncome"
+//  val relation = "http://dbpedia.org/ontology/operatingIncome"
 //  val relation = "http://dbpedia.org/ontology/numberOfEmployees"
-//  val relation = "http://dbpedia.org/ontology/netIncome"
+  val relation = "http://dbpedia.org/ontology/netIncome"
 
-  val relationByYearQuery = (year: String) => AnyQuery("relation-by-year-query", triplestoreUrl + "/company/ch.weisenburger.sparql",
+  val relationByYearQuery = (year: String) => AnyQuery("relation-by-year-query", triplestoreUrl + "/company/sparql",
     s"""
       |SELECT DISTINCT ?s
       |WHERE {

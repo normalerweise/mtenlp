@@ -9,7 +9,7 @@ import org.apache.uima.jcas.JCas
 /**
  * Created by Norman on 07.07.14.
  */
-class FinancialDataSampleScalaCasePipeline private[uima] (
+class FinancialDataSampleExtractionScalaCaseClassPipeline private[uima] (
                                                            private val annotatorComponents: Seq[JCasAnnotator_ImplBase],
                                                            private val jCas: JCas,
                                                            private val sampleScalaCaseConverter: SampleScalaCaseConverter,

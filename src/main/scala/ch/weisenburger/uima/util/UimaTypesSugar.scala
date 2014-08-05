@@ -95,6 +95,9 @@ trait UimaTypesSugar {
     def sentences = jCas.getAnnotationIndex(heideltime.Sentence.`type`)
       .iterator().asInstanceOf[FSIterator[heideltime.Sentence]]
 
+    def timexes = jCas.getAnnotationIndex(heideltime.Timex3.`type`)
+      .iterator().asInstanceOf[FSIterator[heideltime.Timex3]]
+
     def samples = jCas.getAnnotationIndex(distantsupervision.Sample.`type`)
       .iterator().asInstanceOf[FSIterator[distantsupervision.Sample]]
 

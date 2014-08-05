@@ -29,7 +29,7 @@ class SampleScalaCaseConverter extends JCasAnnotator_ImplBase with UimaTypesSuga
       sEntity = eToScalaType.apply(sample.getSentenceSubject,s)
       sRelation = Option(rToScalaType.apply(sample.getSentencePredicate,s))
       sValue = vToScalaType.apply(sample.getSentenceObject, s)
-      sTimex = Option(tToScalaType.apply(sample.getSentenceTimex, s))
+      sTimex = Option(tToScalaType(sample.getSentenceTimex, s))
       qEntity = sample.getQuadSubject
       qRelation = sample.getQuadPredicate
       qValue = sample.getQuadObject
